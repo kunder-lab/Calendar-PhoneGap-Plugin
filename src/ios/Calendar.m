@@ -531,6 +531,7 @@
   NSString* notes      = [options objectForKey:@"notes"];
   NSNumber* startTime  = [options objectForKey:@"startTime"];
   NSNumber* endTime    = [options objectForKey:@"endTime"];
+  NSNumber* allDay    = [options objectForKey:@"allday"];
 
   NSDictionary* calOptions = [options objectForKey:@"options"];
   NSNumber* firstReminderMinutes = [calOptions objectForKey:@"firstReminderMinutes"];
@@ -557,15 +558,8 @@
     myEvent.location = location;
     myEvent.notes = notes;
     myEvent.startDate = myStartDate;
-
-    int duration = _endInterval - _startInterval;
-    int moduloDay = duration % (60*60*24);
-    if (moduloDay == 0) {
-      myEvent.allDay = YES;
-      myEvent.endDate = [NSDate dateWithTimeIntervalSince1970:_endInterval-1];
-    } else {
-      myEvent.endDate = [NSDate dateWithTimeIntervalSince1970:_endInterval];
-    }
+    myEvent.endDate = [NSDate dateWithTimeIntervalSince1970:_endInterval];
+    myEvent.allDay = allDay;
 
     EKCalendar* calendar = nil;
     CDVPluginResult *pluginResult = nil;
@@ -669,7 +663,7 @@
       int moduloDay = duration % (60 * 60 * 24);
       if (moduloDay == 0) {
         myEvent.allDay = YES;
-        myEvent.endDate = [NSDate dateWithTimeIntervalSince1970:_endInterval - 1];
+        myEvent.endDate = [NSDate dateWithTimeIntervalSince1970:_endInterval];
       } else {
         myEvent.endDate = [NSDate dateWithTimeIntervalSince1970:_endInterval];
       }
